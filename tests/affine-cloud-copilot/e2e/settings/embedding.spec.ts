@@ -135,8 +135,10 @@ test.describe('AISettings/Embedding', () => {
     utils,
   }) => {
     await utils.settings.enableWorkspaceEmbedding(page);
-    const textContent1 = 'WorkspaceEBEEE is a cute cat';
-    const textContent2 = 'WorkspaceEBFFF is a cute dog';
+    const randomStr1 = Math.random().toString(36).substring(2, 6);
+    const randomStr2 = Math.random().toString(36).substring(2, 6);
+    const textContent1 = `Workspace${randomStr1} is a cute cat`;
+    const textContent2 = `Workspace${randomStr2} is a cute dog`;
     const buffer1 = Buffer.from(textContent1);
     const buffer2 = Buffer.from(textContent2);
     const attachments = [
@@ -186,13 +188,13 @@ test.describe('AISettings/Embedding', () => {
 
     await utils.chatPanel.makeChat(
       page,
-      'What is WorkspaceEBEEE? What is WorkspaceEBFFF?'
+      `What is Workspace${randomStr1}? What is Workspace${randomStr2}?`
     );
 
     await utils.chatPanel.waitForHistory(page, [
       {
         role: 'user',
-        content: 'What is WorkspaceEBEEE? What is WorkspaceEBFFF?',
+        content: `What is Workspace${randomStr1}? What is Workspace${randomStr2}?`,
       },
       {
         role: 'assistant',
@@ -203,8 +205,8 @@ test.describe('AISettings/Embedding', () => {
     await expect(async () => {
       const { content, message } =
         await utils.chatPanel.getLatestAssistantMessage(page);
-      expect(content).toMatch(/WorkspaceEBEEE.*cat/);
-      expect(content).toMatch(/WorkspaceEBFFF.*dog/);
+      expect(content).toMatch(new RegExp(`Workspace${randomStr1}.*cat`));
+      expect(content).toMatch(new RegExp(`Workspace${randomStr2}.*dog`));
       expect(await message.locator('affine-footnote-node').count()).toBe(2);
     }).toPass({ timeout: 20000 });
   });
@@ -318,11 +320,11 @@ test.describe('AISettings/Embedding', () => {
     await expect(
       attachmentList.getByTestId('workspace-embedding-setting-attachment-item')
     ).toHaveCount(10);
-    const pagination = await attachmentList.getByRole('navigation');
-    const currentPage = await pagination.locator('li.active');
+    const pagination = attachmentList.getByRole('navigation');
+    const currentPage = pagination.locator('li.active');
     await expect(currentPage).toHaveText('1');
 
-    const page2 = await pagination.locator('li').nth(2);
+    const page2 = pagination.locator('li').nth(2);
     await page2.click();
 
     await expect(
@@ -340,7 +342,8 @@ test.describe('AISettings/Embedding', () => {
     utils,
   }) => {
     await utils.settings.enableWorkspaceEmbedding(page);
-    const textContent = 'WorkspaceEBEEE is a cute cat';
+    const randomStr1 = Math.random().toString(36).substring(2, 6);
+    const textContent = `Workspace${randomStr1} is a cute cat`;
     const attachments = [
       {
         name: 'document1.txt',
@@ -350,7 +353,7 @@ test.describe('AISettings/Embedding', () => {
     ];
     await utils.settings.uploadWorkspaceEmbedding(page, attachments);
 
-    const attachmentList = await page.getByTestId(
+    const attachmentList = page.getByTestId(
       'workspace-embedding-setting-attachment-list'
     );
     await expect(
@@ -364,7 +367,8 @@ test.describe('AISettings/Embedding', () => {
     utils,
   }) => {
     await utils.settings.enableWorkspaceEmbedding(page);
-    const textContent = 'WorkspaceEBEEE is a cute cat';
+    const randomStr1 = Math.random().toString(36).substring(2, 6);
+    const textContent = `Workspace${randomStr1} is a cute cat`;
     const attachments = [
       {
         name: 'document1.txt',
@@ -374,7 +378,7 @@ test.describe('AISettings/Embedding', () => {
     ];
     await utils.settings.uploadWorkspaceEmbedding(page, attachments);
 
-    const attachmentList = await page.getByTestId(
+    const attachmentList = page.getByTestId(
       'workspace-embedding-setting-attachment-list'
     );
     await expect(
@@ -394,7 +398,8 @@ test.describe('AISettings/Embedding', () => {
     utils,
   }) => {
     await utils.settings.enableWorkspaceEmbedding(page);
-    const textContent = 'WorkspaceEBEEE is a cute cat';
+    const randomStr1 = Math.random().toString(36).substring(2, 6);
+    const textContent = `Workspace${randomStr1} is a cute cat`;
     const attachments = [
       {
         name: 'document1.txt',
